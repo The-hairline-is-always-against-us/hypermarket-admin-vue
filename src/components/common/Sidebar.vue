@@ -75,7 +75,7 @@ export default {
             this.identity = 'admin'
         }
 
-        if (this.identity === 'admin') {
+        if (this.identity === 'admn') {
             this.items = [
                 {
                     icon: 'el-icon-lx-home',
@@ -113,27 +113,12 @@ export default {
                 {
                     icon: 'el-icon-lx-file',
                     index: 'myTeachCourse',
-                    title: '授课页面'
+                    title: '用户管理'
                 },
                 {
                     icon: 'el-icon-lx-text',
                     index: 'getAllTeacherCourse',
-                    title: '全部课程'
-                },
-                {
-                    icon: 'el-icon-lx-search',
-                    index: 'teachCourse',
-                    title: '授课绑定'
-                },
-                {
-                    icon: 'el-icon-lx-delete',
-                    index: 'dropTeachCourse',
-                    title: '解除授课'
-                },
-                {
-                    icon: 'el-icon-lx-settings',
-                    index: 'changeTeacherInfo',
-                    title: '信息修改'
+                    title: '系统监控'
                 }
             ]
         }

@@ -37,7 +37,7 @@ axios.interceptors.response.use(data => {
     return Promise.resolve(err);
 })
 //生产环境使用
-let base = 'http://localhost:8080/CourseSelect_war';
+let base = 'http://localhost:8082';
 //dev环境使用
 // let base = '';
 export const postRequest = (url, params) => {
