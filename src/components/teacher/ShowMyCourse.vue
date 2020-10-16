@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-file"></i> 用户管理
+                    <i class="el-icon-user-solid"></i> 用户管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -114,9 +114,6 @@ export default {
             }, {
                 value: 'admin',
                 label: '管理员'
-            }, {
-                value: 'root',
-                label: '根用户'
             }],
             newrole: ''
         };

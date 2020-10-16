@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-file"></i> 用户管理
+                    <i class="el-icon-user-solid"></i> 用户管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -16,22 +16,33 @@
                 ref="multipleTable"
             >
                 <el-table-column prop="username" label="用户名" align="center"></el-table-column>
-                <el-table-column prop="email" label="用户邮箱" align="center">
+                <el-table-column prop="email" label="邮箱" align="center" width="400px">
                 </el-table-column>
-                <el-table-column prop="phone" label="用户手机" align="center"></el-table-column>
-                <el-table-column prop="identity" label="用户身份" align="center">
+                <el-table-column prop="role.role" label="用户权限" align="center">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.role.role == 'user'">用户</span>
+                        <span v-if="scope.row.role.role == 'solder'">卖家</span>
+                        <span v-if="scope.row.role.role == 'admin'">管理员</span>
+                        <span v-if="scope.row.role.role == 'root'">根用户</span>
+                    </template>
                 </el-table-column>
-                <el-table-column prop="u_status" label="状态" align="center">
+                <el-table-column  label="用户封禁状态" align="center">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.del_flag == 0">正常</span>
+                        <span v-if="scope.row.del_flag != 0">封禁</span>
+                    </template>
                 </el-table-column>
 
-                <el-table-column prop="c_room" label="操作" align="center">
+                <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button
-                            type="text"
-                            icon="el-icon-circle-close"
-                            :disabled="scope.row.maxFlag"
-                            @click="handleDelete(scope.$index, scope.row)"
-                        >禁用</el-button>
+                        <el-button type="primary" round size="mini" @click="changeRole(scope.row)">修改身份</el-button>
+                        <span v-if="scope.row.del_flag == 0">
+                            <el-button type="danger" round size="mini" :loading="redloading" @click="banUser(scope.row)">禁用用户</el-button>
+                        </span>
+                        <span v-if="scope.row.del_flag != 0">
+                            <el-button type="danger" round size="mini" :loading="redloading" @click="unBanUser(scope.row)">解封用户</el-button>
+                        </span>
+
                     </template>
                 </el-table-column>
             </el-table>
@@ -47,21 +58,26 @@
             </div>
         </div>
 
-        <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="70px">
-                <el-form-item label="用户名">
-                    <el-input v-model="form.name"></el-input>
-                </el-form-item>
-                <el-form-item label="地址">
-                    <el-input v-model="form.address"></el-input>
-                </el-form-item>
-            </el-form>
+        <el-dialog
+            title="提示"
+            :visible.sync="dialogVisible"
+            center
+            width="30%"
+            :before-close="handleClose">
+            <el-select v-model="newrole" placeholder="请选择" style="margin-left: 24%">
+                <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                </el-option>
+            </el-select>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button>
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="realChange">确 定</el-button>
             </span>
         </el-dialog>
+
     </div>
 </template>
 
@@ -78,15 +94,31 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
-            tableData: [{username:'小吴',email:'wu@163.com',phone:'15648975691',identity:'普通用户',u_status:'正常'},
-                        {username:'小刘',email:'liu@163.com',phone:'13647591235',identity:'卖家',u_status:'正常'}],
+            dialogVisible: false,
+            tableData: [],
             multipleSelection: [],
             delList: [],
             editVisible: false,
+            redloading: false,
             pageTotal: 0,
             form: {},
             idx: -1,
-            id: -1
+            id: -1,
+            row:0,
+            options: [{
+                value: 'user',
+                label: '普通用户'
+            }, {
+                value: 'solder',
+                label: '卖家'
+            }, {
+                value: 'admin',
+                label: '管理员'
+            }, {
+                value: 'root',
+                label: '根用户'
+            }],
+            newrole: ''
         };
     },
     created() {
@@ -95,9 +127,7 @@ export default {
     methods: {
         // 获取 easy-mock 的模拟数据
         getData() {
-            postRequest('/student', {
-                'method': 'getCourseInfo'
-            }).then(resp => {
+            this.getRequest('/root/getAllUser').then(resp => {
                 var date = resp.data;
                 if (date.code === 200) {
                     this.tableData = date.message;
@@ -105,11 +135,6 @@ export default {
                     this.$message.error(date.message);
                 }
             })
-        },
-        // 触发搜索按钮
-        handleSearch() {
-            this.$set(this.query, 'pageIndex', 1);
-            this.getData();
         },
         // 删除操作
         handleDelete(index, row) {
@@ -123,37 +148,57 @@ export default {
                 })
                 .catch(() => {});
         },
-        // 多选操作
-        handleSelectionChange(val) {
-            this.multipleSelection = val;
-        },
-        delAllSelection() {
-            const length = this.multipleSelection.length;
-            let str = '';
-            this.delList = this.delList.concat(this.multipleSelection);
-            for (let i = 0; i < length; i++) {
-                str += this.multipleSelection[i].name + ' ';
-            }
-            this.$message.error(`删除了${str}`);
-            this.multipleSelection = [];
-        },
-        // 编辑操作
-        handleEdit(index, row) {
-            this.idx = index;
-            this.form = row;
-            this.editVisible = true;
-        },
-        // 保存编辑
-        saveEdit() {
-            this.editVisible = false;
-            this.$message.success(`修改第 ${this.idx + 1} 行成功`);
-            this.$set(this.tableData, this.idx, this.form);
-        },
         // 分页导航
         handlePageChange(val) {
             this.$set(this.query, 'pageIndex', val);
             this.getData();
-        }
+        },
+        changeRole(row) {
+            this.row = row
+            this.dialogVisible = true
+        },
+        realChange() {
+            this.dialogVisible = false
+            this.postRequest('/root/changeRole',{
+                'username':this.row.username,
+                'role':this.newrole
+            }).then(resp => {
+                if (resp.data.code == 200) {
+                    this.$message.success('设置成功')
+                    this.getData()
+                    this.redloading = false;
+                }
+            })
+            console.log(this.newrole)
+        },
+        banUser(row) {
+            this.redloading = true;
+            this.getRequest(`/root/deleteUser/${row.username}`).then(resp => {
+                if (resp.data.code == 200) {
+                    this.$message.success('设置成功')
+                    this.getData()
+                    this.redloading = false;
+                }
+            })
+        },
+        unBanUser(row) {
+            this.redloading = true;
+            this.getRequest(`/root/unDeleteUser/${row.username}`).then(resp => {
+                if (resp.data.code == 200) {
+                    this.$message.success('设置成功')
+                    this.getData()
+                    this.redloading = false;
+                }
+            })
+        },
+        handleClose(done) {
+            this.$confirm('确认关闭？')
+                .then(_ => {
+                    done();
+                })
+                .catch(_ => {});
+        },
+
     }
 };
 </script>

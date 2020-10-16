@@ -75,7 +75,7 @@ export default {
             this.identity = 'admin'
         }
 
-        if (this.identity === 'admn') {
+        if (this.identity === 'admin') {
             this.items = [
                 {
                     icon: 'el-icon-lx-home',
