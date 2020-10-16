@@ -15,24 +15,27 @@
                 class="table"
                 ref="multipleTable"
             >
-                <el-table-column prop="c_name" label="课程名" align="center"></el-table-column>
-                <el-table-column prop="c_info" label="课程介绍" align="center">
+                <el-table-column prop="apply_name" label="申请人" align="center"></el-table-column>
+                <el-table-column prop="s_name" label="店铺名" align="center">
                 </el-table-column>
-                <el-table-column prop="t_name" label="授课教师" align="center"></el-table-column>
-                <el-table-column prop="c_room" label="授课教室" align="center">
+                <el-table-column prop="apply_time" label="申请时间" align="center"></el-table-column>
+                <el-table-column prop="s_type" label="店铺类型" align="center">
                 </el-table-column>
 
-                <el-table-column label="班级容量" align="center">
-                    <template slot-scope="scope">{{scope.row.c_num}} / 20</template>
-                </el-table-column>
                 <el-table-column label="操作" width="120" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
-                            icon="el-icon-delete"
+                            icon="el-icon-success"
+                            class="green"
+                            @click="handleDelete(scope.$index, scope.row)"
+                        >同意申请</el-button>
+                        <el-button
+                            type="text"
+                            icon="el-icon-error"
                             class="red"
                             @click="handleDelete(scope.$index, scope.row)"
-                        >退课</el-button>
+                        >驳回申请</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -63,7 +66,8 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
-            tableData: [],
+            tableData: [{apply_name:'jack',s_name:'north',apply_time:'2020-07-15 12:04:56',s_type:'家电'},
+                        {apply_name:'rose',s_name:'south',apply_time:'2020-07-15 12:04:56',s_type:'通信'}],
             multipleSelection: [],
             delList: [],
             editVisible: false,

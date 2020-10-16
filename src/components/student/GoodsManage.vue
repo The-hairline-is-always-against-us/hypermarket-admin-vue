@@ -14,15 +14,22 @@
                 class="table"
                 ref="multipleTable"
             >
-                <el-table-column prop="c_name" label="课程名" align="center"></el-table-column>
-                <el-table-column prop="c_info" label="课程介绍" align="center">
+                <el-table-column prop="g_name" label="商品名称" align="center"></el-table-column>
+                <el-table-column prop="g_type" label="商品类型" align="center">
                 </el-table-column>
-                <el-table-column prop="t_name" label="授课教师" align="center"></el-table-column>
-                <el-table-column prop="c_room" label="授课教室" align="center">
-                </el-table-column>
+                <el-table-column prop="store" label="所在店铺" align="center"></el-table-column>
 
-                <el-table-column label="班级容量" align="center">
-                    <template slot-scope="scope">{{scope.row.c_num}} / 20</template>
+                <el-table-column prop="g_price" label="商品单价" align="center"> </el-table-column>
+                <el-table-column prop="g_number" label="商品库存" align="center"> </el-table-column>
+                <el-table-column label="操作" align="center"> 
+                    <template slot-scope="scope">
+                        <el-button
+                            type="text"
+                            icon="el-icon-edit"
+                            :disabled="scope.row.maxFlag"
+                            @click="handleDelete(scope.$index, scope.row)"
+                        >删除</el-button>
+                    </template>
                 </el-table-column>
             </el-table>
             <div class="pagination">
@@ -52,7 +59,8 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
-            tableData: [],
+            tableData: [{g_name:'华为p30',g_type:'手机',store:'小店店',g_price:'1355',g_number:"524"},
+                        {g_name:'液晶',g_type:'电视机',store:'小店店',g_price:'2546',g_number:"156"}],
             multipleSelection: [],
             delList: [],
             editVisible: false,

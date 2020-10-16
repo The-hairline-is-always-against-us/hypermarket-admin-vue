@@ -54,7 +54,7 @@ import bus from '../common/bus';
 export default {
     data() {
         return {
-            identity: 'r',
+            identity: 'admin',
             collapse: false,
             items: []
         };
@@ -72,10 +72,10 @@ export default {
         });
 
         if (this.$store.getters.roles[0] == 0) {
-            this.identity = 'student'
+            this.identity = 'admin'
         }
 
-        if (this.identity === 'student') {
+        if (this.identity === 'admin') {
             this.items = [
                 {
                     icon: 'el-icon-lx-home',
@@ -83,29 +83,24 @@ export default {
                     title: '系统首页'
                 },
                 {
-                    icon: 'el-icon-lx-file',
-                    index: 'showMyCourse',
-                    title: '我的课程'
+                    icon: 'el-icon-user-solid',
+                    index: 'userManage',
+                    title: '用户管理'
                 },
                 {
-                    icon: 'el-icon-lx-text',
-                    index: 'getAllCourse',
-                    title: '全部课程'
+                    icon: 'el-icon-goods',
+                    index: 'goodsManage',
+                    title: '商品管理'
                 },
                 {
-                    icon: 'el-icon-lx-search',
-                    index: 'selectCourse',
-                    title: '选课查询'
+                    icon: 'el-icon-takeaway-box',
+                    index: 'storeManage',
+                    title: '店铺管理'
                 },
                 {
-                    icon: 'el-icon-lx-delete',
-                    index: 'dropCourse',
-                    title: '退课选择'
-                },
-                {
-                    icon: 'el-icon-lx-settings',
-                    index: 'changeInfo',
-                    title: '信息修改'
+                    icon: 'el-icon-document',
+                    index: 'applyList',
+                    title: '申请列表'
                 }
             ]
         } else {

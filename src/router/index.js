@@ -55,6 +55,8 @@ export const constantRouterMap = [
         redirect: '/404'
     },
     commonRouter,
+    studentRouter,
+    teacherRouter,
 ];
 
 //异步挂载的路由

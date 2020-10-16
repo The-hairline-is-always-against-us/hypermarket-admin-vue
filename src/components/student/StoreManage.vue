@@ -15,16 +15,14 @@
                 class="table"
                 ref="multipleTable"
             >
-                <el-table-column prop="c_name" label="课程名" align="center"></el-table-column>
-                <el-table-column prop="c_info" label="课程介绍" align="center">
+                <el-table-column prop="s_name" label="店铺名称" align="center"></el-table-column>
+                <el-table-column prop="s_user" label="店主名称" align="center">
                 </el-table-column>
-                <el-table-column prop="t_name" label="授课教师" align="center"></el-table-column>
-                <el-table-column prop="c_room" label="授课教室" align="center">
+                <el-table-column prop="request_time" label="申请时间" align="center"></el-table-column>
+                <el-table-column prop="create_time" label="批准时间" align="center"></el-table-column>
+                <el-table-column prop="s_status" label="店铺状态" align="center">
                 </el-table-column>
 
-                <el-table-column label="班级容量" align="center">
-                    <template slot-scope="scope">{{scope.row.c_num}} / 20</template>
-                </el-table-column>
                 <el-table-column label="操作" width="120" align="center">
                     <template slot-scope="scope">
                         <el-button
@@ -32,7 +30,7 @@
                             icon="el-icon-edit"
                             :disabled="scope.row.maxFlag"
                             @click="handleEdit(scope.$index, scope.row)"
-                        >选课</el-button>
+                        >删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -71,7 +69,8 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
-            tableData: [],
+            tableData: [{s_name:'小张的店',s_user:'小张',request_time:'2020-10-14 15:03:59',create_time:'2020-10-16 15:03:59',s_status:'已关闭'},
+                        {s_name:'小占的店',s_user:'小占',request_time:'2020-10-14 15:03:59',create_time:'2020-10-16 15:03:59',s_status:'正常'}],
             multipleSelection: [],
             delList: [],
             editVisible: false,

@@ -35,50 +35,50 @@ Vue.prototype.uploadFileRequest = uploadFileRequest;
 Vue.prototype.$md5 = md5;
 
 // //使用钩子函数对路由进行权限跳转
-router.beforeEach(async(to, from, next) => {
-    const hasToken = getToken();
-    if(to.meta) {
-        document.title = to.meta.title||to.params.text;
-    }
-    if (hasToken) {
-        if (to.path === '/login') {
-            next({path : '/dashboard'})
-        } else {
-            const hasRoles = store.getters.roles && store.getters.roles.length > 0;
-            if (hasRoles) {
-                next()
-            } else {
-                try {
-                    // get user info
-                    // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-                    const { role } = await store.dispatch('user/getInfo');
-                    // generate accessible routes map based on roles
-                    const accessRoutes = await store.dispatch('permission/generateRoutes', store.getters.roles);
-                    // dynamically add accessible routes
-                    router.addRoutes(accessRoutes);
+// router.beforeEach(async(to, from, next) => {
+    // const hasToken = getToken();
+    // if(to.meta) {
+    //     document.title = to.meta.title||to.params.text;
+    // }
+    // if (hasToken) {
+    //     if (to.path === '/login') {
+    //         next({path : '/dashboard'})
+    //     } else {
+    //         const hasRoles = store.getters.roles && store.getters.roles.length > 0;
+    //         if (hasRoles) {
+    //             next()
+    //         } else {
+    //             try {
+    //                 // get user info
+    //                 // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
+    //                 const { role } = await store.dispatch('user/getInfo');
+    //                 // generate accessible routes map based on roles
+    //                 const accessRoutes = await store.dispatch('permission/generateRoutes', store.getters.roles);
+    //                 // dynamically add accessible routes
+    //                 router.addRoutes(accessRoutes);
 
-                    // hack method to ensure that addRoutes is complete
-                    // set the replace: true, so the navigation will not leave a history record
-                    next({ ...to, replace: true })
-                } catch (error) {
-                    await store.dispatch('user/resetToken');
-                    messages.error(error || 'Has Error');
-                    next('/login')
-                }
-            }
-        }
-    } else {
-        /* has no token*/
+    //                 // hack method to ensure that addRoutes is complete
+    //                 // set the replace: true, so the navigation will not leave a history record
+    //                 next({ ...to, replace: true })
+    //             } catch (error) {
+    //                 await store.dispatch('user/resetToken');
+    //                 messages.error(error || 'Has Error');
+    //                 next('/login')
+    //             }
+    //         }
+    //     }
+    // } else {
+    //     /* has no token*/
 
-        if (whiteList.indexOf(to.path) !== -1) {
-            // in the free login whitelist, go directly
-            next()
-        } else {
-            // other pages that do not have permission to access are redirected to the login page.
-            next('/login')
-        }
-    }
-});
+    //     if (whiteList.indexOf(to.path) !== -1) {
+    //         // in the free login whitelist, go directly
+    //         next()
+    //     } else {
+    //         // other pages that do not have permission to access are redirected to the login page.
+    //         next('/login')
+    //     }
+    // }
+// });
 
 new Vue({
     router,

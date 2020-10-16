@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-file"></i> 我的课程
+                    <i class="el-icon-lx-file"></i> 用户管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -15,15 +15,24 @@
                 class="table"
                 ref="multipleTable"
             >
-                <el-table-column prop="c_name" label="课程名" align="center"></el-table-column>
-                <el-table-column prop="c_info" label="课程介绍" align="center">
+                <el-table-column prop="username" label="用户名" align="center"></el-table-column>
+                <el-table-column prop="email" label="用户邮箱" align="center">
                 </el-table-column>
-                <el-table-column prop="t_name" label="授课教师" align="center"></el-table-column>
-                <el-table-column prop="c_room" label="授课教室" align="center">
+                <el-table-column prop="phone" label="用户手机" align="center"></el-table-column>
+                <el-table-column prop="identity" label="用户身份" align="center">
+                </el-table-column>
+                <el-table-column prop="u_status" label="状态" align="center">
                 </el-table-column>
 
-                <el-table-column label="班级容量" align="center">
-                    <template slot-scope="scope">{{scope.row.c_num}} / 20</template>
+                <el-table-column prop="c_room" label="操作" align="center">
+                    <template slot-scope="scope">
+                        <el-button
+                            type="text"
+                            icon="el-icon-circle-close"
+                            :disabled="scope.row.maxFlag"
+                            @click="handleDelete(scope.$index, scope.row)"
+                        >禁用</el-button>
+                    </template>
                 </el-table-column>
             </el-table>
             <div class="pagination">
@@ -69,7 +78,8 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
-            tableData: [],
+            tableData: [{username:'小吴',email:'wu@163.com',phone:'15648975691',identity:'普通用户',u_status:'正常'},
+                        {username:'小刘',email:'liu@163.com',phone:'13647591235',identity:'卖家',u_status:'正常'}],
             multipleSelection: [],
             delList: [],
             editVisible: false,
