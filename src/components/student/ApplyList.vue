@@ -15,26 +15,27 @@
                 class="table"
                 ref="multipleTable"
             >
-                <el-table-column prop="apply_name" label="申请人" align="center"></el-table-column>
+                <el-table-column prop="username" label="申请人" align="center"></el-table-column>
                 <el-table-column prop="s_name" label="店铺名" align="center">
                 </el-table-column>
-                <el-table-column prop="apply_time" label="申请时间" align="center"></el-table-column>
+                <el-table-column prop="request_time" label="申请时间" align="center"></el-table-column>
                 <el-table-column prop="s_type" label="店铺类型" align="center">
+                    综合
                 </el-table-column>
 
-                <el-table-column label="操作" width="120" align="center">
+                <el-table-column label="操作" width="250" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-success"
                             class="green"
-                            @click="handleDelete(scope.$index, scope.row)"
+                            @click="handleAgree(scope.$index, scope.row)"
                         >同意申请</el-button>
                         <el-button
                             type="text"
                             icon="el-icon-error"
                             class="red"
-                            @click="handleDelete(scope.$index, scope.row)"
+                            @click="handleReful(scope.$index, scope.row)"
                         >驳回申请</el-button>
                     </template>
                 </el-table-column>
@@ -66,8 +67,7 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
-            tableData: [{apply_name:'jack',s_name:'north',apply_time:'2020-07-15 12:04:56',s_type:'家电'},
-                        {apply_name:'rose',s_name:'south',apply_time:'2020-07-15 12:04:56',s_type:'通信'}],
+            tableData: [],
             multipleSelection: [],
             delList: [],
             editVisible: false,
@@ -83,9 +83,7 @@ export default {
     methods: {
         // 获取 easy-mock 的模拟数据
         getData() {
-            postRequest('/student', {
-                'method': 'getCourseInfo'
-            }).then(resp => {
+            this.getRequest('/getAllPStore').then(resp => {
                 var date = resp.data;
                 if (date.code === 200) {
                     this.tableData = date.message;
@@ -116,6 +114,23 @@ export default {
                     })
                 })
                 .catch(() => {});
+        },
+        handleAgree(index, row) {
+            this.postRequest("/passApply", {
+                "store":`{'s_id':${row.s_id}}`
+            }).then(resp => {
+                var data = resp.data
+                if (data.code == 200) {
+                    this.getData()
+                    this.$message.success(data.message)
+                } else {
+                    this.getData()
+                    this.$message.error(data.message)
+                }
+            })
+        },
+        handleReful(index, row) {
+
         },
         // 分页导航
         handlePageChange(val) {

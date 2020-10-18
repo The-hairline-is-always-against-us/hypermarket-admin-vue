@@ -33,7 +33,7 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column label="操作" align="center">
+                <el-table-column label="操作" align="center" width="270px">
                     <template slot-scope="scope">
                         <el-button type="primary" round size="mini" @click="changeRole(scope.row)">修改身份</el-button>
                         <span v-if="scope.row.del_flag == 0">
@@ -111,12 +111,6 @@ export default {
             }, {
                 value: 'solder',
                 label: '卖家'
-            }, {
-                value: 'admin',
-                label: '管理员'
-            }, {
-                value: 'root',
-                label: '根用户'
             }],
             newrole: ''
         };
@@ -127,7 +121,7 @@ export default {
     methods: {
         // 获取 easy-mock 的模拟数据
         getData() {
-            this.getRequest('/root/getAllUser').then(resp => {
+            this.getRequest('/root/getAdminUserList').then(resp => {
                 var date = resp.data;
                 if (date.code === 200) {
                     this.tableData = date.message;

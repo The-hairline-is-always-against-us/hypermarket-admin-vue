@@ -54,7 +54,7 @@ import bus from '../common/bus';
 export default {
     data() {
         return {
-            identity: 'admin',
+            identity: 'r',
             collapse: false,
             items: []
         };
@@ -71,7 +71,8 @@ export default {
             bus.$emit('collapse-content', msg);
         });
 
-        if (this.$store.getters.roles[0] == 0) {
+        if (this.$store.getters.roles[0] == 'admin') {
+            console.log(this.$store.getters.roles[0])
             this.identity = 'admin'
         }
 

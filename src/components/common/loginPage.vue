@@ -57,13 +57,17 @@ export default {
                     this.loading = true;
                     var md5Pass = this.$md5(this.param.password)
                     this.sendParam.username = this.param.username
-                    this.sendParam.password = md5Pass
+                    this.sendParam.password = this.param.password
                     this.$store.dispatch('user/login', this.sendParam)
-                        .then(() => {
-                            this.$message.success('登陆成功！')
-                            this.$router.push('/dashboard');
-                            next();
-                            this.loading = false
+                        .then((x) => {
+                            if (x == '1') {
+
+                            } else {
+                                this.$message.success('登陆成功！')
+                                this.$router.push('/dashboard');
+                                next();
+                                this.loading = false
+                            }
                         })
                         .catch(() => {
                             this.loading = false

@@ -16,11 +16,15 @@
                 ref="multipleTable"
             >
                 <el-table-column prop="s_name" label="店铺名称" align="center"></el-table-column>
-                <el-table-column prop="s_user" label="店主名称" align="center">
+                <el-table-column prop="username" label="店主名称" align="center">
                 </el-table-column>
                 <el-table-column prop="request_time" label="申请时间" align="center"></el-table-column>
                 <el-table-column prop="create_time" label="批准时间" align="center"></el-table-column>
                 <el-table-column prop="s_status" label="店铺状态" align="center">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.s_status == 0">正常</span>
+                        <span v-if="scope.row.s_status != 0">封禁</span>
+                    </template>
                 </el-table-column>
 
                 <el-table-column label="操作" width="120" align="center">
@@ -69,8 +73,7 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
-            tableData: [{s_name:'小张的店',s_user:'小张',request_time:'2020-10-14 15:03:59',create_time:'2020-10-16 15:03:59',s_status:'已关闭'},
-                        {s_name:'小占的店',s_user:'小占',request_time:'2020-10-14 15:03:59',create_time:'2020-10-16 15:03:59',s_status:'正常'}],
+            tableData: [],
             multipleSelection: [],
             delList: [],
             editVisible: false,
@@ -87,9 +90,7 @@ export default {
     methods: {
         // 获取 easy-mock 的模拟数据
         getData() {
-            postRequest('/stuCourseSelect', {
-                'method': 'getCanSelectCourse'
-            }).then(resp => {
+            this.getRequest('/getAllStore').then(resp => {
                 var date = resp.data;
                 if (date.code === 200) {
                     this.tableData = date.message;
@@ -100,20 +101,10 @@ export default {
         },
         // 编辑操作
         handleEdit(index, row) {
-            this.idx = index;
-            this.form = row;
-            this.editVisible = true;
-            console.log(this.tableData[this.idx].c_id)
-        },
-        // 保存编辑
-        saveEdit() {
-            this.loading = true;
-            postRequest('/stuCourseSelect',{
-                'method':'setCourse',
-                'cla_id': this.tableData[this.idx].c_id
+            this.postRequest('/deleteStoreBySid',{
+                's_id':row.s_id
             }).then(resp => {
-                console.log(resp)
-                var data = resp.data
+                var date = resp.data;
                 if (data.code == 200) {
                     this.$message.success(data.message)
                     this.getData()
@@ -121,9 +112,8 @@ export default {
                     this.$message.error(data.message)
                     this.getData()
                 }
-                this.editVisible = false;
-                this.loading = false;
             })
+            this.getData();
         },
         // 分页导航
         handlePageChange(val) {

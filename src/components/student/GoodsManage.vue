@@ -15,12 +15,22 @@
                 ref="multipleTable"
             >
                 <el-table-column prop="g_name" label="商品名称" align="center"></el-table-column>
-                <el-table-column prop="g_type" label="商品类型" align="center">
+                <el-table-column prop="t_id" label="商品类型" align="center">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.t_id == 1">手机</span>
+                        <span v-if="scope.row.t_id == 2">电视机</span>
+                        <span v-if="scope.row.t_id == 3">空调</span>
+                        <span v-if="scope.row.t_id == 4">洗衣机</span>
+                        <span v-if="scope.row.t_id == 5">保护套</span>
+                        <span v-if="scope.row.t_id == 6">保护膜</span>
+                        <span v-if="scope.row.t_id == 7">充电宝</span>
+                        <span v-if="scope.row.t_id == 8">充电器</span>
+                    </template>
                 </el-table-column>
-                <el-table-column prop="store" label="所在店铺" align="center"></el-table-column>
+                <el-table-column prop="s_name" label="所在店铺" align="center"></el-table-column>
 
                 <el-table-column prop="g_price" label="商品单价" align="center"> </el-table-column>
-                <el-table-column prop="g_number" label="商品库存" align="center"> </el-table-column>
+                <el-table-column prop="g_total" label="商品库存" align="center"> </el-table-column>
                 <el-table-column label="操作" align="center"> 
                     <template slot-scope="scope">
                         <el-button
@@ -59,8 +69,7 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
-            tableData: [{g_name:'华为p30',g_type:'手机',store:'小店店',g_price:'1355',g_number:"524"},
-                        {g_name:'液晶',g_type:'电视机',store:'小店店',g_price:'2546',g_number:"156"}],
+            tableData: [],
             multipleSelection: [],
             delList: [],
             editVisible: false,
@@ -75,9 +84,7 @@ export default {
     },
     methods: {
         getData() {
-            postRequest('/course', {
-                'method': 'getAllCourse'
-            }).then(resp => {
+            postRequest('/getGoods').then(resp => {
                 var date = resp.data;
                 this.tableData = date.message;
             })
@@ -89,8 +96,17 @@ export default {
                 type: 'warning'
             })
                 .then(() => {
-                    this.$message.success('删除成功');
-                    this.tableData.splice(index, 1);
+                    this.postRequest('/deleteGoods', {
+                        'g_id':row.g_id
+                    }).then(resp => {
+                        if (resp.data.code == 200) {
+                            this.$message.success(resp.data.message)
+                            this.getData()
+                        } else {
+                            this.$message.error(resp.data.message)
+                            this.getData()
+                        }
+                    })
                 })
                 .catch(() => {});
         },

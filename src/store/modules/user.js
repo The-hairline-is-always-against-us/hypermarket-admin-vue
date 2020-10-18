@@ -33,11 +33,15 @@ const actions = {
         const { username, password } = userInfo;
         return new Promise((resolve, reject) => {
             postRequest('/login', {
-                'method': 'login',
                 'username': username.trim(),
                 'password': password
             }).then(resp=> {
                 var data= resp.data;
+                console.log(data.user.ur_id)
+                if (data.user.ur_id == 1 || data.user.ur_id == 2) {
+                    this.$message.warning('你是这个身份嘛就登陆？！')
+                    reject('1');
+                }
                 commit('SET_TOKEN', data.message);
                 setToken(data.message);
                 resolve();
@@ -50,10 +54,8 @@ const actions = {
     // get user info
     getInfo({ commit}) {
         return new Promise((resolve, reject) => {
-            postRequest('/login',{
-                'method': 'getInf'
-            }).then(response => {
-                var data = response.data
+            getRequest('/getInfPermiss').then(response => {
+                var data = response.data.message
 
                 if (!data) {
                     reject('Verification failed, please Login again.')
@@ -63,6 +65,7 @@ const actions = {
                 var username = data.username
 
                 var list = [role,'normal']
+                console.log(role)
 
                 commit('SET_ROLES', list);
                 commit('SET_NAME', username);

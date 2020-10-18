@@ -33,7 +33,7 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column label="操作" align="center">
+                <el-table-column label="操作" align="center" width="270px">
                     <template slot-scope="scope">
                         <el-button type="primary" round size="mini" @click="changeRole(scope.row)">修改身份</el-button>
                         <span v-if="scope.row.del_flag == 0">
