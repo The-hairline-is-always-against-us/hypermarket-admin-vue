@@ -7,7 +7,8 @@
                         <img src="../../assets/img/img.jpg" class="user-avator" alt />
                         <div class="user-info-cont">
                             <div class="user-info-name">{{this.$store.getters.username}}</div>
-                            <div>{{this.$store.getters.roles}}</div>
+                            <div v-if="this.$store.getters.roles[0] == 'admin'">管理员</div>
+                            <div v-if="this.$store.getters.roles[0] == 'root'">根用户</div>
                         </div>
                     </div>
                     <div class="user-info-list">
@@ -21,11 +22,11 @@
                 </el-card>
                 <el-card shadow="hover" style="height:252px;">
                     <div slot="header" class="clearfix">
-                        <span>课程热度</span>
-                    </div>Java
-                    <el-progress :percentage="71.3" color="#42b983"></el-progress>DataBase
-                    <el-progress :percentage="24.1" color="#f1e05a"></el-progress>Web
-                    <el-progress :percentage="13.7"></el-progress>SSM
+                        <span>类别热度</span>
+                    </div>手机
+                    <el-progress :percentage="71.3" color="#42b983"></el-progress>电脑
+                    <el-progress :percentage="24.1" color="#f1e05a"></el-progress>空调
+                    <el-progress :percentage="13.7"></el-progress>电视
                     <el-progress :percentage="5.9" color="#f56c6c"></el-progress>
                 </el-card>
             </el-col>
@@ -37,7 +38,7 @@
                                 <i class="el-icon-lx-people grid-con-icon"></i>
                                 <div class="grid-cont-right">
                                     <div class="grid-num">1234</div>
-                                    <div>年级排名</div>
+                                    <div>日消费人数</div>
                                 </div>
                             </div>
                         </el-card>
@@ -48,7 +49,7 @@
                                 <i class="el-icon-lx-notice grid-con-icon"></i>
                                 <div class="grid-cont-right">
                                     <div class="grid-num">321</div>
-                                    <div>系统消息</div>
+                                    <div>待办事项</div>
                                 </div>
                             </div>
                         </el-card>
@@ -59,7 +60,7 @@
                                 <i class="el-icon-lx-goods grid-con-icon"></i>
                                 <div class="grid-cont-right">
                                     <div class="grid-num">5000</div>
-                                    <div>课程数量</div>
+                                    <div>商品数量</div>
                                 </div>
                             </div>
                         </el-card>

@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-delete"></i> 退课选择
+                    <i class="el-icon-lx-delete"></i> 申请列表
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
