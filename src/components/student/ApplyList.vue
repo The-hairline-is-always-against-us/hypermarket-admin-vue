@@ -44,8 +44,8 @@
                 <el-pagination
                     background
                     layout="total, prev, pager, next"
-                    :current-page="query.pageIndex"
-                    :page-size="query.pageSize"
+                    :current-page="pageIndex"
+                    :page-size="pageSize"
                     :total="pageTotal"
                     @current-change="handlePageChange"
                 ></el-pagination>
@@ -72,6 +72,8 @@ export default {
             delList: [],
             editVisible: false,
             pageTotal: 0,
+            pageIndex: 1,
+            pageSize: 10,
             form: {},
             idx: -1,
             id: -1
@@ -83,10 +85,11 @@ export default {
     methods: {
         // 获取 easy-mock 的模拟数据
         getData() {
-            this.getRequest('/getAllPStore').then(resp => {
+            this.getRequest(`/getAllPStore/${this.pageIndex}/${this.pageSize}`).then(resp => {
                 var date = resp.data;
                 if (date.code === 200) {
                     this.tableData = date.message;
+                    this.pageTotal = date.total;
                 } else {
                     this.$message.error(date.message);
                 }
@@ -134,7 +137,7 @@ export default {
         },
         // 分页导航
         handlePageChange(val) {
-            this.$set(this.query, 'pageIndex', val);
+            this.pageIndex = val;
             this.getData();
         }
     }

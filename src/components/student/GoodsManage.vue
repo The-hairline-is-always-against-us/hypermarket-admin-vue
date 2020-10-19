@@ -46,8 +46,8 @@
                 <el-pagination
                     background
                     layout="total, prev, pager, next"
-                    :current-page="query.pageIndex"
-                    :page-size="query.pageSize"
+                    :current-page="pageIndex"
+                    :page-size="pageSize"
                     :total="pageTotal"
                     @current-change="handlePageChange"
                 ></el-pagination>
@@ -74,6 +74,8 @@ export default {
             delList: [],
             editVisible: false,
             pageTotal: 0,
+            pageIndex: 1,
+            pageSize: 10,
             form: {},
             idx: -1,
             id: -1
@@ -84,9 +86,14 @@ export default {
     },
     methods: {
         getData() {
-            postRequest('/getGoods').then(resp => {
+            postRequest('/getGoods',{
+                pageNumber: this.pageIndex,
+                pageSize: this.pageSize
+            }).then(resp => {
                 var date = resp.data;
                 this.tableData = date.message;
+                this.pageTotal = date.total;
+                console.log(this.pageTotal)
             })
         },
         // 删除操作
@@ -112,7 +119,7 @@ export default {
         },
         // 分页导航
         handlePageChange(val) {
-            this.$set(this.query, 'pageIndex', val);
+            this.pageIndex = val
             this.getData();
         }
     }

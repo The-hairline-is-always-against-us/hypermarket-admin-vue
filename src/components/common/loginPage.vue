@@ -24,6 +24,7 @@
 
 import("../../assets/js/ribbon");
 // import("../../assets/js/login_index");
+import {removeToken} from '../../utils/auth'
 
 export default {
     name: 'loginPage',
@@ -33,8 +34,8 @@ export default {
             PassWord: '',
             loading: false,
             param: {
-                username: 'wuyue',
-                password: '123456',
+                username: '',
+                password: '',
             },
             sendParam: {
                 username: '',
@@ -50,6 +51,7 @@ export default {
         submitClick() {
             this.$refs.login.validate(valid => {
                 if (valid) {
+                    removeToken();
                     this.loading = true;
                     var md5Pass = this.$md5(this.param.password)
                     this.sendParam.username = this.param.username
