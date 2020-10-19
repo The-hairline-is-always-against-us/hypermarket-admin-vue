@@ -7,32 +7,32 @@ const teacherRouter = {
         {
             path: '/myTeachCourse',
             component: () => import(/* webpackChunkName: "dashboard" */ '../../components/teacher/ShowMyCourse'),
-            meta: { title: '授课页面' },
-            roles: [1,'normal']
+            meta: { title: '用户管理' },
+            roles: ['root','normal']
         },
         {
             path: '/getAllTeacherCourse',
             component: () => import(/* webpackChunkName: "dashboard" */ '../../components/teacher/GetAllCourse'),
-            meta: { title: '全部课程' },
-            roles: [1,'normal']
+            meta: { title: '系统监控' },
+            roles: ['root','normal']
         },
         {
             path: '/teachCourse',
             component: () => import(/* webpackChunkName: "dashboard" */ '../../components/teacher/SelectCourse'),
             meta: { title: '授课绑定' },
-            roles: [1,'normal']
+            roles: ['root','normal']
         },
         {
             path: '/dropTeachCourse',
             component: () => import(/* webpackChunkName: "dashboard" */ '../../components/teacher/DropCourse'),
             meta: { title: '解除授课' },
-            roles: [1,'normal']
+            roles: ['root','normal']
         },
         {
             path: '/changeTeacherInfo',
             component: () => import(/* webpackChunkName: "dashboard" */ '../../components/teacher/ChangeInfo'),
             meta: { title: '信息修改' },
-            roles: [1,'normal']
+            roles: ['root','normal']
         }
     ]
 };

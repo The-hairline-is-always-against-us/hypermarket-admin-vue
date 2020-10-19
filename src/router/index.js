@@ -38,7 +38,7 @@ export const constantRouterMap = [
     {
         path: '/login',
         component: () => import(/* webpackChunkName: "login" */ '../components/common/loginPage.vue'),
-        meta: { title: '选课系统' }
+        meta: { title: '二米商城管理端' }
     },
     {
         path: '/register',
@@ -54,9 +54,7 @@ export const constantRouterMap = [
         path: '*',
         redirect: '/404'
     },
-    commonRouter,
-    studentRouter,
-    teacherRouter,
+    commonRouter
 ];
 
 //异步挂载的路由

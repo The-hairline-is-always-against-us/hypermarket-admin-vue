@@ -7,26 +7,26 @@ const studentRouter = {
         {
             path: '/userManage',
             component: () => import(/* webpackChunkName: "dashboard" */ '../../components/student/UserManage'),
-            meta: { title: '选课页面' },
-            roles: [0,'normal']
+            meta: { title: '用户管理' },
+            roles: ['admin','normal']
         },
         {
             path: '/goodsManage',
             component: () => import(/* webpackChunkName: "dashboard" */ '../../components/student/GoodsManage'),
-            meta: { title: '全部课程' },
-            roles: [0,'normal']
+            meta: { title: '商品管理' },
+            roles: ['admin','normal']
         },
         {
             path: '/storeManage',
             component: () => import(/* webpackChunkName: "dashboard" */ '../../components/student/StoreManage'),
-            meta: { title: '选课查询' },
-            roles: [0,'normal']
+            meta: { title: '商铺管理' },
+            roles: ['admin','normal']
         },
         {
             path: '/applyList',
             component: () => import(/* webpackChunkName: "dashboard" */ '../../components/student/ApplyList'),
-            meta: { title: '退课选择' },
-            roles: [0,'normal']
+            meta: { title: '申请管理' },
+            roles: ['admin','normal']
         },
         {
             path: '/changeInfo',
