@@ -12,10 +12,6 @@
                 <el-form-item prop="password">
                     <el-input v-model="param.password" clearable show-password placeholder="密码"></el-input>
                 </el-form-item>
-                <el-form-item>
-                    <router-link tag="a" to="/register" style="font-size: 10px;float: right;margin-top: -20px;margin-left: 20px">忘记密码？</router-link>
-                    <router-link tag="a" to="/register" style="font-size: 10px;float: right;margin-top: -20px">没有账号？</router-link>
-                </el-form-item>
                 <el-form-item class="login-btn">
                     <el-button type="primary" @click.native.prevent="submitClick" :loading="this.loading" style="height: 40px">登录</el-button>
                 </el-form-item>
@@ -57,7 +53,7 @@ export default {
                     this.loading = true;
                     var md5Pass = this.$md5(this.param.password)
                     this.sendParam.username = this.param.username
-                    this.sendParam.password = this.param.password
+                    this.sendParam.password = md5Pass
                     this.$store.dispatch('user/login', this.sendParam)
                         .then((x) => {
                             if (x == '1') {
